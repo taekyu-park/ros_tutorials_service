@@ -16,9 +16,17 @@ find_package(catkin REQUIRED COMPONENTS
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
+# -------- 이 부분에 딱 추가해 주시면 됩니다! --------
+add_message_files(FILES MsgTutorial.msg)
+generate_messages(DEPENDENCIES std_msgs)
+# --------------------------------------------------
+
+catkin_package(
+  LIBRARIES ros_tutorials_topic
+  CATKIN_DEPENDS std_msgs roscpp
+)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
-## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
 # catkin_python_setup()
 
@@ -204,3 +212,11 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(topic_publisher src/topic_publisher.cpp)
+add_dependencies(topic_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(topic_publisher ${catkin_LIBRARIES})
+
+add_executable(topic_subscriber src/topic_subscriber.cpp)
+add_dependencies(topic_subscriber ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(topic_subscriber ${catkin_LIBRARIES})
