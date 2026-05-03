@@ -12,6 +12,17 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
 )
+# 1. 사용할 서비스 파일을 알려줍니다
+add_service_files(
+  FILES
+  SrvTutorial.srv
+)
+
+# 2. 의존하는 메시지 패키지를 기반으로 실제 코드를 생성합니다
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -22,8 +33,8 @@ generate_messages(DEPENDENCIES std_msgs)
 # --------------------------------------------------
 
 catkin_package(
-  LIBRARIES ros_tutorials_topic
-  CATKIN_DEPENDS std_msgs roscpp
+  LIBRARIES ros_tutorials_service
+  CATKIN_DEPENDS roscpp std_msgs message_runtime 
 )
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -220,3 +231,13 @@ target_link_libraries(topic_publisher ${catkin_LIBRARIES})
 add_executable(topic_subscriber src/topic_subscriber.cpp)
 add_dependencies(topic_subscriber ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(topic_subscriber ${catkin_LIBRARIES})
+
+# 서버 빌드 설정
+add_executable(service_server src/service_server.cpp)
+add_dependencies(service_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(service_server ${catkin_LIBRARIES})
+
+# 클라이언트 빌드 설정
+add_executable(service_client src/service_client.cpp)
+add_dependencies(service_client ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(service_client ${catkin_LIBRARIES})
